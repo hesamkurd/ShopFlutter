@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '../utils/app_layout.dart';
-import '../models/product.dart';
-import '../widgets/product_item.dart';
 
-class ProductsOverviewScreen extends StatelessWidget {
-  ProductsOverviewScreen({super.key});
-  final List<Product> loadedProducts = [
+import '../models/product.dart';
+
+class Products with ChangeNotifier {
+  final List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -39,27 +37,12 @@ class ProductsOverviewScreen extends StatelessWidget {
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROPHgkZYTzALOfEjZm0Nm0yTEjaoIcBMUK0w&usqp=CAU',
     ),
   ];
+  List<Product> get items {
+    return [..._items];
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('MyShop'),
-      ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(
-          AppLayout.getHeight(10),
-        ),
-        itemCount: loadedProducts.length,
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: AppLayout.getWidth(200),
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: AppLayout.getWidth(20),
-          mainAxisSpacing: AppLayout.getHeight(20),
-        ),
-        itemBuilder: (context, index) => ProductItem(loadedProducts[index].id,
-            loadedProducts[index].title, loadedProducts[index].imageUrl),
-      ),
-    );
+  void addProduct() {
+    //_items.add(value);
+    notifyListeners();
   }
 }
