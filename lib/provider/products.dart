@@ -37,13 +37,32 @@ class Products with ChangeNotifier {
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROPHgkZYTzALOfEjZm0Nm0yTEjaoIcBMUK0w&usqp=CAU',
     ),
   ];
+
+  //var _showFavoriteOnly = false;
   List<Product> get items {
+    // if (_showFavoriteOnly) {
+    //   return _items.where((productItem) => productItem.isFavorite).toList();
+    // }
     return [..._items];
+  }
+
+  List<Product> get favoriteItems {
+    return _items.where((productItem) => productItem.isFavorite).toList();
   }
 
   Product findById(String id) {
     return items.firstWhere((product) => product.id == id);
   }
+
+  // void showFavoriteOnly() {
+  //   _showFavoriteOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoriteOnly = false;
+  //   notifyListeners();
+  // }
 
   void addProduct() {
     //_items.add(value);
