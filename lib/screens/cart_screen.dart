@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app_flutter/provider/order.dart';
 import 'package:shop_app_flutter/widgets/cart_item_list.dart';
-import '../../provider/cart.dart';
+import '../provider/cart.dart';
 import 'package:shop_app_flutter/utils/app_layout.dart';
 
 class CartScreen extends StatelessWidget {
