@@ -35,7 +35,7 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             onPressed: () {
-              cart.addItem(product.id, product.title, product.price);
+              cart.addItem(product.id!, product.title!, product.price!);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -47,7 +47,7 @@ class ProductItem extends StatelessWidget {
                   action: SnackBarAction(
                       label: 'UNDO',
                       onPressed: () {
-                        cart.removeSingleItem(product.id);
+                        cart.removeSingleItem(product.id!);
                       }),
                 ),
               );
@@ -56,7 +56,7 @@ class ProductItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
           ),
           title: Text(
-            product.title,
+            product.title!,
             textAlign: TextAlign.center,
           ),
         ),
@@ -68,7 +68,7 @@ class ProductItem extends StatelessWidget {
             );
           },
           child: Image.network(
-            product.imageUrl,
+            product.imageUrl!,
             fit: BoxFit.cover,
           ),
         ),
