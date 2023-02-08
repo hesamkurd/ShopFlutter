@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/products.dart';
 import '../provider/product.dart';
 import '../utils/app_layout.dart';
 
@@ -42,16 +44,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if ((_imageUrlController.text.startsWith('http') &&
+              _imageUrlController.text.startsWith('https')) ||
+          (_imageUrlController.text.endsWith('.png') &&
+              _imageUrlController.text.endsWith('.jpg') &&
+              _imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
       setState(() {});
     }
   }
 
   void _saveForm() {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState!.save();
-    print(_editProduct.title);
-    print(_editProduct.price);
-    print(_editProduct.description);
-    print(_editProduct.imageUrl);
+    Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -62,7 +73,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         actions: [
           IconButton(
             onPressed: _saveForm,
-            icon:const Icon(Icons.save),
+            icon: const Icon(Icons.save),
           ),
         ],
       ),
@@ -87,6 +98,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     imageUrl: _editProduct.imageUrl,
                   );
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please provide a value';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Price'),
@@ -105,6 +122,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     imageUrl: _editProduct.imageUrl,
                   );
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter a price';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Please enter a number greater than zero';
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Description'),
@@ -119,6 +148,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     price: _editProduct.price,
                     imageUrl: _editProduct.imageUrl,
                   );
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  if (value.length < 10) {
+                    return 'Should be at least 10 characters long';
+                  }
+                  return null;
                 },
               ),
               Row(
@@ -159,6 +197,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           price: _editProduct.price,
                           imageUrl: value,
                         );
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a image URL';
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please enter a valid URL';
+                        }
+                        if (!value.endsWith('.png') &&
+                            !value.endsWith('.jpg') &&
+                            !value.endsWith('jpeg')) {
+                          return 'Please enter a valid image URL';
+                        }
+                        return null;
                       },
                     ),
                   ),
